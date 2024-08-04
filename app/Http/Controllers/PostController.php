@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\Post;
+use App\Http\Requests\PostRequest; // useする
 
 class PostController extends Controller
 {
@@ -17,5 +18,18 @@ class PostController extends Controller
     public function index(Post $post)
     {
         return view('posts.index')->with(['posts' => $post->getPaginateByLimit(1)]);
+
+    }
+    
+    public function create()
+    {
+        return view('posts.create');
+    }
+    
+    public function store(PostRequest $request, Post $post)
+    {
+        $input = $request['post'];
+        $post->fill($input)->save();
+        return redirect('/posts/' . $post->id);
     }
 }
